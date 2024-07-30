@@ -1,0 +1,6 @@
+flask
+braintree
+load_dotenv
+flask_cors
+requests
+chevron
