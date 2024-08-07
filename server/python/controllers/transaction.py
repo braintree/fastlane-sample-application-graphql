@@ -11,6 +11,12 @@ def braintree_graphql_transaction(transactionData):
             chargeCreditCard(input: $input) {
                 transaction {
                     id
+                    legacyId
+                    createdAt
+                    amount {
+                        value
+                        currencyCode
+                    }
                     status
                 }
             }

@@ -22,6 +22,12 @@ public class ClientTransactionGraphQLController : Controller
                     chargeCreditCard(input: $input) {
                         transaction {
                             id
+                            legacyId
+                            createdAt
+                            amount {
+                                value
+                                currencyCode
+                            }
                             status
                         }
                     }

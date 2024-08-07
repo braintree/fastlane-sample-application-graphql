@@ -9,6 +9,12 @@ export async function createTransaction(req, res) {
         chargeCreditCard(input: $input) {
           transaction {
             id
+            legacyId
+            createdAt
+            amount {
+              value
+              currencyCode
+            }
             status
           }
         }
@@ -22,16 +28,16 @@ export async function createTransaction(req, res) {
           riskData: { deviceData },
           shipping: {
             shippingAddress,
-            shippingMethod: 'GROUND'
+            shippingMethod: 'GROUND',
           },
           customerDetails: { email },
           vaultPaymentMethodAfterTransacting: {
-            when: 'ON_SUCCESSFUL_TRANSACTION'
-          }
+            when: 'ON_SUCCESSFUL_TRANSACTION',
+          },
         },
         options: {
-          billingAddress: paymentToken.paymentSource.card.billingAddress
-        }
+          billingAddress: paymentToken.paymentSource.card.billingAddress,
+        },
       },
     };
     const response = await fetchGraphql({ query, variables });
