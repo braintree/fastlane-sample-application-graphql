@@ -11,6 +11,7 @@
   "dependencies": {
     "braintree": "^3.23.0",
     "consolidate": "^1.0.3",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mustache": "^4.2.0"

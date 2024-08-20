@@ -18,7 +18,8 @@ public class RenderGraphQLController : Controller
 
         foreach (var param in queryParams)
         {
-            if (param.Key == "flexible") {
+            if (param.Key == "flexible")
+            {
                 isFlexibleIntegration = true;
             }
         }

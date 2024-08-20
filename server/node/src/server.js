@@ -1,5 +1,6 @@
 import engines from 'consolidate';
 import express from 'express';
+import cors from 'cors';
 
 import { renderCheckout } from './controllers/checkout.js';
 import { getClientToken } from './controllers/client-token.js';
@@ -12,6 +13,7 @@ export function configureServer(app) {
 
   app.enable('strict routing');
 
+  app.use(cors());
   app.use(express.json());
 
   app.get('/', renderCheckout);
