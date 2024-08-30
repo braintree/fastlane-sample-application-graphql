@@ -1,0 +1,55 @@
+{
+    "name": "Dotnet",
+    "image": "mcr.microsoft.com/devcontainers/dotnet:8.0",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}/server/dotnet",
+    "forwardPorts": [
+        5000,
+        5001
+    ],
+    "portsAttributes": {
+        "5000": {
+            "label": "Dotnet HTTP",
+            "onAutoForward": "openBrowserOnce"
+        },
+        "5001": {
+            "label": "Dotnet HTTPS",
+            "onAutoForward": "openBrowserOnce"
+        }
+    },
+    "secrets": {
+        "BRAINTREE_MERCHANT_ID": {
+            "description": "Sandbox merchant ID of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        },
+        "BRAINTREE_PUBLIC_KEY": {
+            "description": "Sandbox public key of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        },
+        "BRAINTREE_PRIVATE_KEY": {
+            "description": "Sandbox private key of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        }
+    },
+    "containerEnv": {
+        "DOMAINS": "paypal.com"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vsls-contrib.codetour",
+                "PayPal.vscode-paypal",
+                "ms-dotnettools.csharp"
+            ]
+        },
+        "settings": {
+            "git.openRepositoryInParentFolders": "always"
+        },
+        "codespaces": {
+            "openFiles": [
+                "README.md"
+            ]
+        }
+    },
+    "postCreateCommand": "dotnet restore",
+    "postAttachCommand": "dotnet run"
+}

@@ -1,0 +1,56 @@
+{
+    "name": "Java",
+    "image": "mcr.microsoft.com/devcontainers/java:17",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}/server/java",
+    "forwardPorts": [
+        8080
+    ],
+    "portsAttributes": {
+        "8080": {
+            "label": "Java",
+            "onAutoForward": "openBrowserOnce"
+        }
+    },
+    "secrets": {
+        "BRAINTREE_MERCHANT_ID": {
+            "description": "Sandbox merchant ID of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        },
+        "BRAINTREE_PUBLIC_KEY": {
+            "description": "Sandbox public key of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        },
+        "BRAINTREE_PRIVATE_KEY": {
+            "description": "Sandbox private key of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        }
+    },
+    "containerEnv": {
+        "DOMAINS": "paypal.com"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vsls-contrib.codetour",
+                "PayPal.vscode-paypal",
+                "vscjava.vscode-java-pack"
+            ]
+        },
+        "settings": {
+            "git.openRepositoryInParentFolders": "always"
+        },
+        "codespaces": {
+            "openFiles": [
+                "README.md"
+            ]
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/java:1": {
+            "version": "17",
+            "installMaven": "true"
+        }
+    },
+    "postCreateCommand": "cd /workspaces/${localWorkspaceFolderBasename}/server && touch java/.env && cd java && mvn clean install",
+    "postAttachCommand": "mvn spring-boot:run"
+}

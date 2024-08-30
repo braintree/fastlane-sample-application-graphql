@@ -1,0 +1,50 @@
+{
+    "name": "Node",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}/server/node",
+    "forwardPorts": [
+        3000
+    ],
+    "portsAttributes": {
+        "3000": {
+            "label": "Node",
+            "onAutoForward": "openBrowserOnce"
+        }
+    },
+    "secrets": {
+        "BRAINTREE_MERCHANT_ID": {
+            "description": "Sandbox merchant ID of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        },
+        "BRAINTREE_PUBLIC_KEY": {
+            "description": "Sandbox public key of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        },
+        "BRAINTREE_PRIVATE_KEY": {
+            "description": "Sandbox private key of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        }
+    },
+    "containerEnv": {
+        "DOMAINS": "paypal.com"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vsls-contrib.codetour",
+                "PayPal.vscode-paypal",
+                "dbaeumer.vscode-eslint"
+            ]
+        },
+        "settings": {
+            "git.openRepositoryInParentFolders": "always"
+        },
+        "codespaces": {
+            "openFiles": [
+                "README.md"
+            ]
+        }
+    },
+    "postCreateCommand": "npm install",
+    "postAttachCommand": "npm start"
+}
