@@ -33,7 +33,9 @@ def bt_graphql_transaction():
 
 @app.route("/<path:filename>")
 def serve_static(filename):
-    return send_from_directory(os.path.join(app.root_path, "../../client"), filename)
+    return send_from_directory(
+        os.path.join(app.root_path, "../../client/html/src"), filename
+    )
 
 
 # Run the server

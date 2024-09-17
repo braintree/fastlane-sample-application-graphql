@@ -109,6 +109,7 @@ fetch('client-token')
     const getAddressSummary = ({
       firstName,
       lastName,
+      company,
       streetAddress,
       extendedAddress,
       locality,
@@ -120,6 +121,7 @@ fetch('client-token')
       const isNotEmpty = (field) => !!field;
       const summary = [
         [firstName, lastName].filter(isNotEmpty).join(' '),
+        company,
         [streetAddress, extendedAddress].filter(isNotEmpty).join(', '),
         [
           locality,
@@ -219,6 +221,7 @@ fetch('client-token')
         // extract form values
         const firstName = form.elements['given-name'].value;
         const lastName = form.elements['family-name'].value;
+        const company = form.elements['company'].value;
         const streetAddress = form.elements['address-line1'].value;
         const extendedAddress = form.elements['address-line2'].value;
         const locality = form.elements['address-level2'].value;
@@ -236,6 +239,7 @@ fetch('client-token')
         shippingAddress = {
           firstName,
           lastName,
+          company,
           streetAddress,
           extendedAddress,
           locality,

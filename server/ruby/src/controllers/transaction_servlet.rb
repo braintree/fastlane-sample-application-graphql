@@ -62,15 +62,21 @@ class TransactionServlet < WEBrick::HTTPServlet::AbstractServlet
     if errors
       response.status = 500
       response.content_type = 'application/json'
-      response.header['Access-Control-Allow-Origin'] = '*'
-      response.header['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, DELETE'
       response.body = { error: errors }.to_json
       response
     end
 
     response.status = 201
     response.content_type = 'application/json'
+    response.header['Access-Control-Allow-Origin'] = '*'
+    response.header['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, DELETE'
     response.body = { result: data['chargeCreditCard']['transaction'] }.to_json
     response
+  end
+
+  def do_OPTIONS(request, response)
+    response.header['Access-Control-Allow-Origin'] = '*'
+    response.header['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, DELETE'
+    response.header['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
   end
 end

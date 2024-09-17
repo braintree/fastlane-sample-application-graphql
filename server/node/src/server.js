@@ -20,5 +20,5 @@ export function configureServer(app) {
   app.get('/client-token', getClientToken);
   app.post('/transaction', createTransaction);
 
-  app.use(express.static('../../client'));
+  app.use(express.static('../../client/html/src'));
 }

@@ -33,14 +33,14 @@ class ClientTokenServlet < WEBrick::HTTPServlet::AbstractServlet
     if errors
       response.status = 500
       response.content_type = 'application/json'
-      response.header['Access-Control-Allow-Origin'] = '*'
-      response.header['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, DELETE'
       response.body = { error: errors }.to_json
       response
     end
 
     response.status = 200
     response.content_type = 'application/json'
+    response.header['Access-Control-Allow-Origin'] = '*'
+    response.header['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, DELETE'
     response.body = { clientToken: data['createClientToken']['clientToken'] }.to_json
     response
   end

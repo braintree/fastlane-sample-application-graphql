@@ -13,7 +13,7 @@ export function fetchGraphql(payload) {
 
   const headers = new Headers();
   const apiKey = Buffer.from(
-    `${BRAINTREE_PUBLIC_KEY}:${BRAINTREE_PRIVATE_KEY}`
+    `${BRAINTREE_PUBLIC_KEY}:${BRAINTREE_PRIVATE_KEY}`,
   ).toString('base64');
   headers.append('Authorization', `Basic ${apiKey}`);
   headers.append('Braintree-Version', '2024-08-01');

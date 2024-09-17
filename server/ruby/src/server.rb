@@ -11,7 +11,7 @@ require_relative './controllers/client_token_servlet'
 require_relative './controllers/transaction_servlet'
 
 views_root = File.expand_path '../shared/views'
-client_root = File.expand_path '../../client'
+client_root = File.expand_path '../../client/html/src'
 
 server = WEBrick::HTTPServer.new Port: 8080, DocumentRoot: views_root
 
