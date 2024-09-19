@@ -1,0 +1,68 @@
+{
+    "name": "Vue + Java",
+    "image": "mcr.microsoft.com/devcontainers/java:17",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "forwardPorts": [
+        8080,
+        5173
+    ],
+    "portsAttributes": {
+        "8080": {
+            "label": "Java",
+            "onAutoForward": "openBrowserOnce"
+        },
+        "5173": {
+            "label": "Vue",
+            "onAutoForward": "openBrowserOnce"
+        }
+    },
+    "secrets": {
+        "BRAINTREE_MERCHANT_ID": {
+            "description": "Sandbox merchant ID of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        },
+        "BRAINTREE_PUBLIC_KEY": {
+            "description": "Sandbox public key of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        },
+        "BRAINTREE_PRIVATE_KEY": {
+            "description": "Sandbox private key of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        }
+    },
+    "containerEnv": {
+        "DOMAINS": "paypal.com",
+        "VISIBLE_FOLDER_SERVER": "java",
+        "VISIBLE_FOLDER_CLIENT": "vue"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vsls-contrib.codetour",
+                "PayPal.vscode-paypal",
+                "vscjava.vscode-java-pack",
+                "Vue.volar",
+                "Vue.vscode-typescript-vue-plugin"
+            ]
+        },
+        "settings": {
+            "git.openRepositoryInParentFolders": "always"
+        },
+        "codespaces": {
+            "openFiles": [
+                "README.md"
+            ]
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/java:1": {
+            "version": "17",
+            "installMaven": "true"
+        },
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        }
+    },
+    "postCreateCommand": "chmod +x .devcontainer/update_settings.sh && .devcontainer/update_settings.sh && cd /workspaces/${localWorkspaceFolderBasename}/server && touch java/.env && cd java && mvn clean install && cd /workspaces/${localWorkspaceFolderBasename}/client/vue && npm install",
+    "postAttachCommand": "cd server/java && mvn spring-boot:run & cd /workspaces/${localWorkspaceFolderBasename}/client/vue && npm run dev"
+}

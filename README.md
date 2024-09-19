@@ -57,5 +57,36 @@ Fastlane Flexible Integration allows you to customize and style your payment pag
 - Further customize the behavior and experience of your checkout
 - Data Security: Flexible Integration is PCI DSS compliant, ensuring that customer payment information is handled securely
 
-## Codespaces
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/paypal-examples/fastlane-sample-application-graphql)
+# Running on Codespaces
+Follow below steps to use Codespaces.
+
+1) Click "New with options..." to open a page where you can choose the Dev container to run.
+![image](https://github.com/user-attachments/assets/0d4bf202-0c94-42ec-aa2e-d8ccb6da9eb8)
+
+2) Choose the Dev container to run
+![image](https://github.com/user-attachments/assets/b612467d-9fdc-4666-8dfa-0d99af6a2d39)
+
+3) Client ID and Client Secrets are required for running the application in codespace.
+![image](https://github.com/user-attachments/assets/f8e33fb8-1bd6-47a1-a040-eb6d402629e3)
+
+### Link to codespaces 
+| Application | Codespaces Link |
+| ---- | ---- |
+| Angular + Dotnet | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fangular_dotnet%2Fdevcontainer.json)|
+| Angular + Java | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fangular_java%2Fdevcontainer.json)|
+| Angular + Node | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fangular_node%2Fdevcontainer.json)|
+| Angular + PHP | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fangular_php%2Fdevcontainer.json)|
+| Angular + Python | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fangular_python%2Fdevcontainer.json)|
+| Angular + Ruby | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fangular_ruby%2Fdevcontainer.json)|
+| HTML + Dotnet | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fhtml_dotnet%2Fdevcontainer.json)|
+| HTML + Java | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fhtml_java%2Fdevcontainer.json)|
+| HTML + Node | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fhtml_node%2Fdevcontainer.json)|
+| HTML + PHP | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fhtml_php%2Fdevcontainer.json)|
+| HTML + Python | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fhtml_python%2Fdevcontainer.json)|
+| HTML + Ruby | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fhtml_ruby%2Fdevcontainer.json)|
+| Vue + Dotnet | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fvue_dotnet%2Fdevcontainer.json)|
+| Vue + Java | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fvue_java%2Fdevcontainer.json)|
+| Vue + Node | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fvue_node%2Fdevcontainer.json)|
+| Vue + PHP | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fvue_php%2Fdevcontainer.json)|
+| Vue + Python | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fvue_python%2Fdevcontainer.json)|
+| Vue + Ruby | [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/braintree/fastlane-sample-application-graphql?devcontainer_path=.devcontainer%2Fvue_ruby%2Fdevcontainer.json)|
