@@ -1,13 +1,18 @@
 {
-    "name": "Java",
-    "image": "mcr.microsoft.com/devcontainers/java:17",
-    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}/server/java",
+    "name": "Vue + Ruby",
+    "image": "mcr.microsoft.com/devcontainers/ruby:2.7",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
     "forwardPorts": [
-        8080
+        4567,
+        5173
     ],
     "portsAttributes": {
-        "8080": {
-            "label": "Java",
+        "4567": {
+            "label": "Ruby",
+            "onAutoForward": "openBrowserOnce"
+        },
+        "5173": {
+            "label": "Vue",
             "onAutoForward": "openBrowserOnce"
         }
     },
@@ -26,14 +31,18 @@
         }
     },
     "containerEnv": {
-        "DOMAINS": "paypal.com"
+        "DOMAINS": "paypal.com",
+        "VISIBLE_FOLDER_SERVER": "ruby",
+        "VISIBLE_FOLDER_CLIENT": "vue"
     },
     "customizations": {
         "vscode": {
             "extensions": [
                 "vsls-contrib.codetour",
                 "PayPal.vscode-paypal",
-                "vscjava.vscode-java-pack"
+                "rebornix.Ruby",
+                "Vue.volar",
+                "Vue.vscode-typescript-vue-plugin"
             ]
         },
         "settings": {
@@ -46,11 +55,10 @@
         }
     },
     "features": {
-        "ghcr.io/devcontainers/features/java:1": {
-            "version": "17",
-            "installMaven": "true"
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
         }
     },
-    "postCreateCommand": "cd /workspaces/${localWorkspaceFolderBasename}/server && touch java/.env && cd java && mvn clean install",
-    "postAttachCommand": "mvn spring-boot:run"
+    "postCreateCommand": "chmod +x .devcontainer/update_settings.sh && .devcontainer/update_settings.sh && cd server/ruby && gem install bundler:1.17.2 && bundle _1.17.2_ install --path vendor/bundle && cd /workspaces/${localWorkspaceFolderBasename}/client/vue && npm install",
+    "postAttachCommand": "cd server/ruby && bundle exec ruby src/server.rb & cd /workspaces/${localWorkspaceFolderBasename}/client/vue && npm run dev"
 }

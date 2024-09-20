@@ -1,0 +1,63 @@
+{
+    "name": "Angular + Python",
+    "image": "mcr.microsoft.com/devcontainers/python:3.10",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "forwardPorts": [
+        8888,
+        4200
+    ],
+    "portsAttributes": {
+        "8888": {
+            "label": "Python",
+            "onAutoForward": "openBrowserOnce"
+        },
+        "4200": {
+            "label": "Angular",
+            "onAutoForward": "openBrowserOnce"
+        }
+    },
+    "secrets": {
+        "BRAINTREE_MERCHANT_ID": {
+            "description": "Sandbox merchant ID of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        },
+        "BRAINTREE_PUBLIC_KEY": {
+            "description": "Sandbox public key of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        },
+        "BRAINTREE_PRIVATE_KEY": {
+            "description": "Sandbox private key of the application.",
+            "documentationUrl": "https://sandbox.braintreegateway.com/home"
+        }
+    },
+    "containerEnv": {
+        "DOMAINS": "paypal.com",
+        "VISIBLE_FOLDER_SERVER": "python",
+        "VISIBLE_FOLDER_CLIENT": "angular"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vsls-contrib.codetour",
+                "PayPal.vscode-paypal",
+                "ms-python.python"
+            ]
+        },
+        "settings": {
+            "git.openRepositoryInParentFolders": "always",
+            "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python"
+        },
+        "codespaces": {
+            "openFiles": [
+                "README.md"
+            ]
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        }
+    },
+    "postCreateCommand": "chmod +x .devcontainer/update_settings.sh && .devcontainer/update_settings.sh && cd server/python && python -m venv .venv && . .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt && cd /workspaces/${localWorkspaceFolderBasename}/client/angular && npm install",
+    "postAttachCommand": "cd server/python && . .venv/bin/activate && python app.py & cd /workspaces/${localWorkspaceFolderBasename}/client/angular && npm start --no-analytics"
+}
