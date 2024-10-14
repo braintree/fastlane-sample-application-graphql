@@ -1,5 +1,6 @@
 <script setup>
 import { inject, onMounted, ref } from 'vue';
+import { validateFields } from '../utils/form';
 
 onMounted(async () => {
   braintree = inject('braintree');
@@ -15,6 +16,7 @@ const paymentSummary = ref('');
 const isShippingRequired = ref(true);
 const memberHasSavedPaymentMethods = ref(false);
 const isDisabled = ref(false);
+const checkoutForm = ref(null);
 
 const activeSection = ref('customer');
 const pinnedSection = ref('');
@@ -75,6 +77,14 @@ async function initialize() {
 }
 
 async function lookupEmailProfile() {
+  
+  // Checks if email is empty or in a invalid format
+  const isEmailValid = validateFields(checkoutForm.value, ['email']);
+  
+  if (!isEmailValid) {
+    return;
+  }
+  
   shippingAddress = undefined;
   billingAddress = undefined;
   paymentToken = undefined;
@@ -171,6 +181,30 @@ async function handleEditShipping() {
 }
 
 async function submitShippingAddress() {
+
+  if (!isShippingRequired.value) {
+    shippingAddress = undefined;
+    activeSection.value = memberHasSavedPaymentMethods.value ? 'payment' : 'billing';
+    addressSummary.value = getAddressSummary({});
+    return;
+  }
+  
+  const isShippingFormValid = validateFields(checkoutForm.value, [
+    'given-name',
+    'family-name',
+    'shipping-address-line1',
+    'shipping-address-level2',
+    'shipping-address-level1',
+    'shipping-postal-code',
+    'shipping-country',
+    'tel-country-code',
+    'tel-national',
+  ]);
+  
+  if (!isShippingFormValid) {
+    return;
+  }
+
   const {
     firstName,
     lastName,
@@ -199,7 +233,8 @@ async function submitShippingAddress() {
     region,
     postalCode,
     countryCodeAlpha2,
-    phoneNumber: telCountryCode + telNational,
+    phoneNumber: telCountryCode && telNational ? 
+      telCountryCode + telNational : undefined,
   };
 
   addressSummary.value = getAddressSummary(shippingAddress);
@@ -217,6 +252,20 @@ async function handleEditBilling() {
 }
 
 async function submitBillingAddress() {
+
+  // validate form values
+  const isBillingFormValid = validateFields(checkoutForm.value, [
+    'billing-address-line1',
+    'billing-address-level2',
+    'billing-address-level1',
+    'billing-postal-code',
+    'billing-country',
+  ]);
+  
+  if (!isBillingFormValid) {
+    return;
+  }
+
   const streetAddress = billingAddressForm.value.addressLine1;
   const extendedAddress = billingAddressForm.value.addressLine2;
   const locality = billingAddressForm.value.addressLevel2;
@@ -355,7 +404,7 @@ function setPaymentSummary(paymentToken) {
 </script>
 
 <template>
-  <form @submit.prevent="() => null">
+  <form ref="checkoutForm" @submit.prevent="() => null">
     <h1>Fastlane - Braintree GraphQL Integration (Flexible)</h1>
     <section id="customer" :class="getSectionStatus('customer')">
       <div class="header">
@@ -377,6 +426,7 @@ function setPaymentSummary(paymentToken) {
             <div class="form-group">
               <input
                 required
+                maxlength="255"
                 name="email"
                 type="email"
                 placeholder="Email"
@@ -422,6 +472,7 @@ function setPaymentSummary(paymentToken) {
             id="shipping-required-checkbox"
             name="shipping-required"
             type="checkbox"
+            v-model="isShippingRequired"
             :checked="isShippingRequired"
           />
           <label for="shipping-required-checkbox">
@@ -431,6 +482,8 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              required
+              maxlength="255"
               id="given-name"
               name="given-name"
               autocomplete="given-name"
@@ -441,6 +494,8 @@ function setPaymentSummary(paymentToken) {
           </div>
           <div class="form-group">
             <input
+              required
+              maxlength="255"
               id="family-name"
               name="family-name"
               autocomplete="family-name"
@@ -453,6 +508,7 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              maxlength="255"
               id="company"
               name="company"
               autocomplete="organization"
@@ -467,6 +523,8 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              required
+              maxlength="255"
               id="shipping-address-line1"
               name="address-line1"
               autocomplete="address-line1"
@@ -481,6 +539,7 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              maxlength="255"
               id="shipping-address-line2"
               name="address-line2"
               autocomplete="address-line2"
@@ -495,6 +554,8 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              required
+              maxlength="255"
               id="shipping-address-level2"
               name="address-level2"
               autocomplete="address-level2"
@@ -506,6 +567,8 @@ function setPaymentSummary(paymentToken) {
 
           <div class="form-group">
             <input
+              required
+              maxlength="255"
               id="shipping-address-level1"
               name="address-level1"
               autocomplete="address-level1"
@@ -518,6 +581,8 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              required pattern="\d{5}(-\d{4})?"
+              title="The ZIP code must have the one of the following formats: 12345 or 12345-6789"
               id="shipping-postal-code"
               name="postal-code"
               autocomplete="postal-code"
@@ -528,6 +593,11 @@ function setPaymentSummary(paymentToken) {
           </div>
           <div class="form-group">
             <input
+              required 
+              pattern="US" 
+              minlength="2" 
+              maxlength="2" 
+              title="Currently only available to the US"
               id="shipping-country"
               name="country"
               autocomplete="country"
@@ -542,6 +612,9 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              pattern="([0-9]{1,3})?" 
+              title="Please enter a valid country calling code with 1 to 3 digits"
+              minlength="1" maxlength="3"
               id="tel-country-code"
               name="tel-country-code"
               autocomplete="tel-country-code"
@@ -555,6 +628,8 @@ function setPaymentSummary(paymentToken) {
 
           <div class="form-group">
             <input
+              pattern="([0-9]{10})?"
+              title="Please enter a valid US phone number like (123) 456-7890, type only numbers"
               id="tel-national"
               name="tel-national"
               type="tel"
@@ -600,6 +675,8 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              required
+              maxlength="255"
               id="billing-address-line1"
               name="billing-address-line1"
               placeholder="Street address"
@@ -614,6 +691,7 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              maxlength="255"
               id="billing-address-line2"
               name="billing-address-line2"
               placeholder="Apt., ste., bldg. (optional)"
@@ -628,6 +706,8 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              required
+              maxlength="255"
               id="billing-address-level2"
               name="billing-address-level2"
               placeholder="City"
@@ -638,6 +718,8 @@ function setPaymentSummary(paymentToken) {
           </div>
           <div class="form-group">
             <input
+              required
+              maxlength="255"
               id="billing-address-level1"
               name="billing-address-level1"
               placeholder="State"
@@ -650,6 +732,9 @@ function setPaymentSummary(paymentToken) {
         <div class="form-row">
           <div class="form-group">
             <input
+              required 
+              pattern="\d{5}(-\d{4})?"
+              title="The ZIP code must have the one of the following formats: 12345 or 12345-6789"
               id="billing-postal-code"
               name="billing-postal-code"
               placeholder="ZIP code"
@@ -660,6 +745,11 @@ function setPaymentSummary(paymentToken) {
           </div>
           <div class="form-group">
             <input
+              required 
+              pattern="US" 
+              minlength="2" 
+              maxlength="2" 
+              title="Currently only available to the US"
               id="billing-country"
               name="billing-country"
               placeholder="Country"

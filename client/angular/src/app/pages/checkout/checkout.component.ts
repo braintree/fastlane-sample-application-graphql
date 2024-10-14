@@ -157,6 +157,12 @@ export class CheckoutComponent implements OnInit {
 
     public onShippingChange(nextShipping: ShippingAddressData): void {
         this.currentCustomer.shippingAddress = nextShipping;
+
+        if (!nextShipping) {
+            this.setActiveSection(Section.Payment);
+            return;
+        }
+
         const shipping = this.getTransactionShippingAddressData(this.currentCustomer.shippingAddress);
         this.fastlanePaymentComponent.setShippingAddress(shipping);
         this.setActiveSection(Section.Payment);
@@ -177,7 +183,8 @@ export class CheckoutComponent implements OnInit {
             region: shippingAddress.region,
             postalCode: shippingAddress.postalCode,
             countryCodeAlpha2: shippingAddress.countryCodeAlpha2,
-            phoneNumber: (shippingAddress.phoneCountryCode || "") + shippingAddress.phoneNumber,
+            phoneNumber: shippingAddress.phoneCountryCode && shippingAddress.phoneNumber ?
+                shippingAddress.phoneCountryCode +  shippingAddress.phoneNumber : undefined,
         };
     }
 }

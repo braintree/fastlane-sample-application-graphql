@@ -209,7 +209,8 @@ export class CheckoutFlexibleComponent implements OnInit {
             region: shippingAddress.region,
             postalCode: shippingAddress.postalCode,
             countryCodeAlpha2: shippingAddress.countryCodeAlpha2,
-            phoneNumber: (shippingAddress.phoneCountryCode || "") + shippingAddress.phoneNumber,
+            phoneNumber: shippingAddress.phoneCountryCode && shippingAddress.phoneNumber ?
+                shippingAddress.phoneCountryCode +  shippingAddress.phoneNumber : undefined,
         };
     }
 
