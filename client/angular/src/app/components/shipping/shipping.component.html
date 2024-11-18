@@ -114,7 +114,7 @@
             pattern="([0-9]{10})?"
             title="Please enter a valid US phone number like (123) 456-7890, type only numbers"
             [ngClass]="{'input-invalid': shippingForm.get('phoneNumber')?.invalid && shippingFormInvalid }"
-            pattern="[0-9]{10}" formControlName="phoneNumber"
+            formControlName="phoneNumber"
             id="tel-national" name="tel-national" type="tel" autocomplete="tel-national" placeholder="Phone Number" />
           <label for="tel-national" class="label">Phone Number</label>
         </div>

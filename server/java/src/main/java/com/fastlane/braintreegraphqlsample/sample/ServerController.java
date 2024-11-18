@@ -7,9 +7,11 @@ import com.fastlane.braintreegraphqlsample.sample.models.TransactionRequest;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,10 +20,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-public class SampleController {
+public class ServerController {
 
     private final String title = "Fastlane - Braintree GraphQL Integration";
     private final String prerequisiteScripts =
@@ -37,30 +40,23 @@ public class SampleController {
     private final ArrayList<String> DOMAINS;
     private final String MERCHANT_ID;
 
-    private final GraphqlService graphqlService;
+    private final String BRAINTREE_API_BASE_URL;
+    private final String BRAINTREE_PRIVATE_KEY;
+    private final String BRAINTREE_PUBLIC_KEY;
 
-    public SampleController(GraphqlService graphqlService) {
+    public ServerController() {
         this.dotenv = Dotenv.load();
+
+        this.BRAINTREE_API_BASE_URL = this.dotenv.get("BRAINTREE_API_BASE_URL", "https://payments.sandbox.braintree-api.com");
+        this.BRAINTREE_PRIVATE_KEY = this.dotenv.get("BRAINTREE_PRIVATE_KEY");
+        this.BRAINTREE_PUBLIC_KEY = this.dotenv.get("BRAINTREE_PUBLIC_KEY");
         this.DOMAINS = new ArrayList<>(Arrays.asList(dotenv.get("DOMAINS").split(",")));
         this.MERCHANT_ID = dotenv.get("BRAINTREE_MERCHANT_ID");
-
-        this.graphqlService = graphqlService;
     }
 
-    @GetMapping("/")
-    public ModelAndView getCheckout(@RequestParam(name = "flexible", required = false) String isFlexible, Model model) {
-        model.addAttribute("title", isFlexible != null ? title + " (Flexible)" : title);
-        model.addAttribute("prerequisiteScripts", prerequisiteScripts);
-        model.addAttribute(
-            "initScriptPath",
-            isFlexible != null ? String.format(initScriptPath, "-flexible") : String.format(initScriptPath, "")
-        );
-        model.addAttribute("stylesheetPath", stylesheetPath);
-
-        String page = isFlexible != null ? "checkout-flexible" : "checkout";
-
-        return new ModelAndView(page, model.asMap());
-    }
+    /* ######################################################################
+     * Token generation helpers
+     * ###################################################################### */
 
     @CrossOrigin
     @GetMapping("/client-token")
@@ -84,7 +80,7 @@ public class SampleController {
             input.put("clientToken", clientToken);
             variables.put("input", input);
 
-            Map<String, ?> response = graphqlService.fetch(query, variables);
+            Map<String, ?> response = fetch(query, variables);
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode rootNode = mapper.valueToTree(response);
@@ -101,6 +97,56 @@ public class SampleController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    public Map<String, ?> fetch(String query, Map<String, Object> variables) {
+        String auth = BRAINTREE_PUBLIC_KEY + ":" + BRAINTREE_PRIVATE_KEY;
+        String apiKey = new String(Base64.getEncoder().encode(auth.getBytes()));
+
+        RestClient client = RestClient.builder()
+            .baseUrl(BRAINTREE_API_BASE_URL)
+            .defaultHeaders(httpHeaders -> {
+                httpHeaders.add("Authorization", "Basic " + apiKey);
+                httpHeaders.add("Braintree-Version", "2024-08-01");
+            })
+            .build();
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("query", query);
+        payload.put("variables", variables);
+
+        ResponseEntity<Map> result = client
+            .post()
+            .uri("/graphql")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(payload)
+            .retrieve()
+            .toEntity(Map.class);
+
+        return result.getBody();
+    }
+
+    /* ######################################################################
+     * Serve checkout page
+     * ###################################################################### */
+
+    @GetMapping("/")
+    public ModelAndView getCheckout(@RequestParam(name = "flexible", required = false) String isFlexible, Model model) {
+        model.addAttribute("title", isFlexible != null ? title + " (Flexible)" : title);
+        model.addAttribute("prerequisiteScripts", prerequisiteScripts);
+        model.addAttribute(
+            "initScriptPath",
+            isFlexible != null ? String.format(initScriptPath, "-flexible") : String.format(initScriptPath, "")
+        );
+        model.addAttribute("stylesheetPath", stylesheetPath);
+
+        String page = isFlexible != null ? "checkout-flexible" : "checkout";
+
+        return new ModelAndView(page, model.asMap());
+    }
+
+    /* ######################################################################
+     * Process transactions
+     * ###################################################################### */
 
     @CrossOrigin
     @PostMapping("/transaction")
@@ -186,7 +232,7 @@ public class SampleController {
                 }
             };
 
-            Map<String, ?> transactionResponse = graphqlService.fetch(query, variables);
+            Map<String, ?> transactionResponse = fetch(query, variables);
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode rootNode = mapper.valueToTree(transactionResponse);

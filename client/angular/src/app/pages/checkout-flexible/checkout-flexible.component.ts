@@ -3,7 +3,7 @@ import { finalize } from 'rxjs';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { BillingAddressData } from 'src/app/components/billing/billing.component';
 import { CustomerResponse } from 'src/app/components/customer/customer.component';
-import { ShippingAddressData } from 'src/app/components/shipping/shipping.component';
+import { ShippingAddressFormData } from 'src/app/components/shipping/shipping.component';
 import { CustomWindow } from 'src/app/interfaces/window.interface';
 import { TokenService } from 'src/app/services/token.service';
 import { TransactionService } from 'src/app/services/transaction.service';
@@ -32,6 +32,7 @@ export class CheckoutFlexibleComponent implements OnInit {
     public fastlaneDeviceData: any;
     public fastlaneCardComponent: any;
     public fastlaneWatermarkComponent: any;
+    public fastlanePaymentWatermarkComponent: any;
 
     public currentCustomer: CustomerResponse = {
         authenticated: false,
@@ -91,7 +92,10 @@ export class CheckoutFlexibleComponent implements OnInit {
         this.fastlaneProfile = profile;
         this.fastlaneDeviceData = deviceData;
         this.fastlaneCardComponent = await FastlaneCardComponent();
-        this.fastlaneWatermarkComponent = await FastlaneWatermarkComponent();
+        this.fastlanePaymentWatermarkComponent = await FastlaneWatermarkComponent({ includeAdditionalInfo: false });
+        this.fastlaneWatermarkComponent = await FastlaneWatermarkComponent({
+            includeAdditionalInfo: true
+        });
     }
 
     public async onCheckoutButtonClick(): Promise<void> {
@@ -140,7 +144,7 @@ export class CheckoutFlexibleComponent implements OnInit {
         this.resetPaymentSection();
 
         if (this.currentCustomer.paymentToken) {
-            this.fastlaneWatermarkComponent.render('#payment-watermark');
+            this.fastlanePaymentWatermarkComponent.render('#payment-watermark');
         } else {
             this.fastlaneCardComponent.render('#card-component');
         }
@@ -171,7 +175,7 @@ export class CheckoutFlexibleComponent implements OnInit {
         }
     }
 
-    public onShippingChange(nextShipping: ShippingAddressData): void {
+    public onShippingChange(nextShipping: ShippingAddressFormData): void {
         this.currentCustomer.shippingAddress = nextShipping;
         this.setActiveSection(this.currentCustomer.paymentToken ? Section.Payment : Section.Billing);
     }
@@ -198,7 +202,7 @@ export class CheckoutFlexibleComponent implements OnInit {
         }
     }
 
-    private getTransactionShippingAddressData(shippingAddress: ShippingAddressData | undefined) {
+    private getTransactionShippingAddressData(shippingAddress: ShippingAddressFormData | undefined) {
         return shippingAddress && {
             firstName: shippingAddress.firstName,
             lastName: shippingAddress.lastName,

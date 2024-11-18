@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ShippingAddressData } from '../shipping/shipping.component';
+import { ShippingAddressFormData } from '../shipping/shipping.component';
 import { BillingAddressData } from '../billing/billing.component';
 import { ComponentFormState } from 'src/app/interfaces/types';
 
@@ -8,7 +8,7 @@ export interface CustomerResponse {
   authenticated: boolean;
   email: string;
   name: string;
-  shippingAddress?: ShippingAddressData;
+  shippingAddress?: ShippingAddressFormData;
   billingAddress?: BillingAddressData;
   paymentToken: { [key: string]: any } | null;
 }

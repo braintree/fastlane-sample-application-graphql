@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { FormControl, FormGroup } from '@angular/forms';
 import { ComponentFormState } from 'src/app/interfaces/types';
 
-export interface ShippingAddressData {
+export interface ShippingAddressFormData {
     firstName: string;
     lastName: string;
     company?: string | null;
@@ -30,12 +30,12 @@ export class ShippingComponent {
     public isAuthenticated = false;
 
     @Input()
-    public set shippingAddressData(shipping: ShippingAddressData | undefined) {
+    public set shippingAddressData(shipping: ShippingAddressFormData | undefined) {
         this.updateShippingForm(shipping);
         this._shippingAddressData = shipping;
     };
 
-    public get shippingAddressData(): ShippingAddressData | undefined {
+    public get shippingAddressData(): ShippingAddressFormData | undefined {
         return this._shippingAddressData
     }
 
@@ -56,7 +56,7 @@ export class ShippingComponent {
     public editClickEvent = new EventEmitter<void>();
 
     @Output()
-    public shippingChangeEvent = new EventEmitter<ShippingAddressData>();
+    public shippingChangeEvent = new EventEmitter<ShippingAddressFormData>();
 
     public shippingFormState = ComponentFormState.Valid;
 
@@ -88,7 +88,7 @@ export class ShippingComponent {
 
     private _isActive = false;
 
-    private _shippingAddressData: ShippingAddressData | undefined;
+    private _shippingAddressData: ShippingAddressFormData | undefined;
 
     public onContinueButtonClick(): void {
 
@@ -105,7 +105,7 @@ export class ShippingComponent {
         
         const form = this.shippingForm.value;
 
-        const shippingData: ShippingAddressData = {
+        const shippingData: ShippingAddressFormData = {
             firstName: form.firstName || "",
             lastName: form.lastName || "",
             company: form.company,
@@ -126,7 +126,7 @@ export class ShippingComponent {
         this.shippingFormState = ComponentFormState.Valid;
     }
 
-    public updateShippingForm(shippingData: ShippingAddressData | undefined) {
+    public updateShippingForm(shippingData: ShippingAddressFormData | undefined) {
         const params = {
             firstName: shippingData?.firstName || "",
             lastName: shippingData?.lastName || "",
@@ -144,7 +144,7 @@ export class ShippingComponent {
         this.shippingForm.setValue(params);
     }
 
-    public formatAddressSummary(shipping: ShippingAddressData | undefined): string {
+    public formatAddressSummary(shipping: ShippingAddressFormData | undefined): string {
         if (!shipping) return "";
         const isNotEmpty = (field: any) => Boolean(field);
         const summary = [

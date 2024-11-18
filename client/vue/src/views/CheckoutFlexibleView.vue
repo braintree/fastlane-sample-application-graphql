@@ -68,7 +68,7 @@ async function initialize() {
   });
 
   cardComponent = await fastlaneInstance.FastlaneCardComponent();
-  paymentWatermark = await fastlaneInstance.FastlaneWatermarkComponent();
+  paymentWatermark = await fastlaneInstance.FastlaneWatermarkComponent({ includeAdditionalInfo: false });
 
   watermarkComponent = await fastlaneInstance.FastlaneWatermarkComponent({
     includeAdditionalInfo: true,
