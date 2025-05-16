@@ -134,7 +134,7 @@ class ServerController extends AbstractController
                         "deviceData" => $data["deviceData"],
                     ],
                     "shipping" => [
-                        "shippingAddress" => $data["shippingAddress"],
+                        "shippingAddress" => $data["shippingAddress"] ?? null,
                         "shippingMethod" => "GROUND",
                     ],
                     "customerDetails" => [

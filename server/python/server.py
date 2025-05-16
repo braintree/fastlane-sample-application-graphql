@@ -140,6 +140,7 @@ def braintree_graphql_render(args, templates_folder):
 def braintree_graphql_transaction(transactionData):
     try:
         payment_token = transactionData["paymentToken"]
+        shippingAddress = transactionData.get("shippingAddress", None)
 
         query = """
             mutation ($input: ChargeCreditCardInput!) {
@@ -163,9 +164,22 @@ def braintree_graphql_transaction(transactionData):
                 "paymentMethodId": payment_token["id"],
                 "transaction": {
                     "amount": "1.00",
-                    "riskData": {"deviceData": transactionData["deviceData"]},
+                    "riskData": {
+                        "deviceData": transactionData["deviceData"]
+                    },
                     "shipping": {
-                        "shippingAddress": transactionData["shippingAddress"],
+                        "shippingAddress": (
+                            {
+                                "streetAddress": shippingAddress.get("streetAddress"),
+                                "extendedAddress": shippingAddress.get("extendedAddress"),
+                                "locality": shippingAddress.get("locality"),
+                                "region": shippingAddress.get("region"),
+                                "postalCode": shippingAddress.get("postalCode"),
+                                "countryCodeAlpha2": shippingAddress.get("countryCodeAlpha2")
+                            }
+                            if shippingAddress
+                            else {}
+                        ),
                         "shippingMethod": "GROUND",
                     },
                     "customerDetails": {
