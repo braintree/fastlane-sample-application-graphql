@@ -113,15 +113,15 @@ namespace dotnet.Controllers
             { "title", "Fastlane - Braintree GraphQL Integration" + (isFlexibleIntegration ? " (Flexible)" : "") },
             { "prerequisiteScripts", @"
                 <script
-                    src=""https://js.braintreegateway.com/web/3.106.0/js/client.min.js""
+                    src=""https://js.braintreegateway.com/web/3.116.2/js/client.min.js""
                     defer
                 ></script>
                 <script
-                    src=""https://js.braintreegateway.com/web/3.106.0/js/data-collector.min.js""
+                    src=""https://js.braintreegateway.com/web/3.116.2/js/data-collector.min.js""
                     defer
                 ></script>
                 <script
-                    src=""https://js.braintreegateway.com/web/3.106.0/js/fastlane.min.js""
+                    src=""https://js.braintreegateway.com/web/3.116.2/js/fastlane.min.js""
                     defer
                 ></script>
             " },
